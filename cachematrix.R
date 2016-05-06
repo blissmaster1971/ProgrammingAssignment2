@@ -1,15 +1,38 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The two functions serve to eliminate the need for r to evauate the inverse
+## of a matrix, but instead return a cache value if it exists
 
-## Write a short comment describing this function
+## Returns a list of functions
 
 makeCacheMatrix <- function(x = matrix()) {
 
-}
+        inv <- NULL
+        set <- function(y) {
+        x <<- y
+        inv <<- NULL
+       }
+      get <- function() x
+      setInverse <- function(inverse) inv <<- inverse
+      getInverse <- function() inv
+      list(set = set,
+          get = get,
+          setInverse = setInverse,
+          getInverse = getInverse)
+  }
+> 
 
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
+ 
+ ## returns inverse of matrix that is the imput of makeCacheMatrix
+  
+ cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
-}
+      inv <- x$getInverse()
+       if (!is.null(inv)) {
+         message("getting cached data")
+         return(inv)
+        }
+       mat <- x$get()
+     inv <- solve(mat, ...)
+      x$setInverse(inv)
+     inv
+ }
+ 
